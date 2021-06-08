@@ -11,7 +11,7 @@ func main() {
 
 	for i := 0; i < 30; i++ {
 		url := "http://101.132.109.207:8000/logistics/add-trackingmore"
-		req, _ := http.NewRequest("GET", url, nil)
+		req, _:= http.NewRequest("GET", url, nil)
 		res, _ := http.DefaultClient.Do(req)
 		defer res.Body.Close()
 		body, _ := ioutil.ReadAll(res.Body)
