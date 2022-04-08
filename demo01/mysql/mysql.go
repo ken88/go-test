@@ -4,9 +4,8 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"strings"
-
 	_ "github.com/go-sql-driver/mysql"
+	"strings"
 )
 
 type Model struct {
@@ -45,8 +44,8 @@ func NewModel(table string) Model {
 func (model *Model) getConnect() {
 
 	//1.连接数据库
-	db, err := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/test?parseTime=true")
-
+	db, err := sql.Open("mysql", "root:123456@tcp(127.0.0.1:3306)/acl?parseTime=true")
+	//db, err := sql.Open("mysql", "super-xxx:9HAkMVxWXIkX9HBD1@tcp(rm-t4n1a1m62fyvq1913o.mysql.singapore.rds.aliyuncs.com:3306)/product_center_online?parseTime=true")
 	//2.判断连接
 	if err != nil {
 		fmt.Printf("connect mysql fail! [%s]", err)
@@ -167,7 +166,60 @@ func (model *Model) Update(data map[string]interface{}) interface{} {
 	return result
 }
 
-func (model *Model) Query(sql string) interface{} {
+// 返回 []map[string]interface{}
+func (model *Model) Query(sql string) []map[string]string {
+
+	rows, _ := model.link.Query(sql)
+
+	// fmt.Println(rows) // &{0xc000114000 0x6e3b40 0xc000040140 <nil> <nil> {{0 0} 0 0 0 0} false <nil> []}
+
+	// 返回所有列
+	cols, _ := rows.Columns()
+
+	// fmt.Println(cols)
+
+	//这里表示一行所有列的值，用[]byte表示
+	vals := make([][]byte, len(cols))
+
+	//这里表示一行填充数据
+	scans := make([]interface{}, len(cols))
+
+	//这里scans引用vals，把数据填充到[]byte里
+	for k, _ := range vals {
+		scans[k] = &vals[k]
+	}
+
+	i := 0
+	//result := make(map[int]map[string]string)
+	result := make([]map[string]string, 0)
+	for rows.Next() { // 如果有数据 执行
+
+		//填充数据
+		rows.Scan(scans...) //将slic地址传入
+
+		//每行数据
+		row := make(map[string]string)
+		//把vals中的数据复制到row中
+		for k, v := range vals {
+			key := cols[k]
+
+			//这里把[]byte数据转成string
+			row[key] = string(v)
+
+		}
+		//放入结果集
+		//result[i] = row
+		result = append(result, row)
+		i++
+	}
+
+	// fmt.Println(result)
+	return result
+
+}
+
+// 返回json数组
+func (model *Model) Query1(sql string) interface{} {
 
 	rows, err := model.link.Query(sql)
 	if err != nil {
@@ -220,13 +272,14 @@ func (model *Model) Query(sql string) interface{} {
 
 func (model *Model) Find() interface{} {
 	sql := "select " + model.field + " from " + model.table + model.where + " limit 1"
+
 	//执行并发送sql
 	result := model.Query(sql)
 	return result
 }
 
 func (model *Model) All() interface{} {
-	sql := "select " + model.field + " from " + model.table + model.where
+	sql := "select " + model.field + " from " + model.table + model.where + model.limit
 	//执行并发送sql
 	result := model.Query(sql)
 	return result

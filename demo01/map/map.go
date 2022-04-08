@@ -1,13 +1,15 @@
 package main
 
+import "fmt"
+
 func main() {
 	//第一种创建
-	// var userinfo = make(map[string]string)
-	// userinfo["username"] = "张三"
-	// userinfo["age"] = "20"
-	// userinfo["sex"] = "男"
-	// fmt.Println(userinfo)             //map[age:20 sex:男 username:张三]
-	// fmt.Println(userinfo["username"]) //张三
+	var userinfo = make(map[string]string)
+	userinfo["username"] = "张三"
+	userinfo["age"] = "20"
+	userinfo["sex"] = "男"
+	fmt.Println(userinfo)             //map[age:20 sex:男 username:张三]
+	fmt.Println(userinfo["username"]) //张三
 
 	//第二种创建
 	// var userinfo = map[string]string{

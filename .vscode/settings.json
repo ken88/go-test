@@ -1,3 +1,6 @@
 {
-    "go.inferGopath": false
+    "go.inferGopath": false,
+    "editor.fontSize": 14,
+    "workbench.tree.indent": 22,
+    "workbench.tree.renderIndentGuides": "always"
 }

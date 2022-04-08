@@ -1,77 +1,80 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"os"
 )
 
 func main() {
+	// 通过ioutil复制文件
+	// ioutilCopyFile()
 
+	// 创建目录
+	// createCataloguee()
+
+	// 删除文件
+	// deletefile()
+
+	// 重命名
+	chongmingming()
 }
 
-// 通过ioutil 方式读取
-func read3() {
-	byteStr, err := ioutil.ReadFile("d:/aaa.txt")
+// 重命名
+func chongmingming() {
+	err := os.Rename("./a11.txt", "./aaa.txt")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(string(byteStr))
+	fmt.Println("重命名成功")
 }
 
-// 通过bufio 流方式读取
-func read2() {
-	file, err := os.Open("d:/aaa.txt")
-	defer file.Close() // 方法执行完毕 关闭文件
+// 删除文件
+func deletefile() {
+	// 删除文件
+	// err := os.Remove("./test.txt")
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	return
+	// }
+	// fmt.Println("删除成功")
+
+	// 删除/aaa/bbb 目录下的所有目录
+	err := os.RemoveAll("./aaa/bbb")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	var fileStr string
-	reader := bufio.NewReader(file)
-	for {
-		str, err := reader.ReadString('\n') // 表示一次读一行
-		if err == io.EOF {
-			fileStr += str
-			break
-		}
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		fileStr += str
-	}
-	fmt.Println(fileStr)
+	fmt.Println("删除成功")
 }
 
-//通过read 流方式读取
-func read1() {
-	// 1.打开文件
-	// 只读方式打开文件
-	file, err := os.Open("d:/aaa.txt")
-	defer file.Close() // 方法执行完毕 关闭文件
+// 创建目录
+func createCataloguee() {
+	// err := os.Mkdir("./dir", 0755)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	return
+	// }
+
+	err := os.MkdirAll("./dir/dir1/dir2", 0755)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	// 2. 读取文件的内容
-	var strSlice []byte
-	var tempSlice = make([]byte, 128)
-	for {
-		n, err := file.Read(tempSlice) // 每次读取128字节
-		if err == io.EOF {             // io.EOF 表示读取完毕
-			fmt.Println("读取完毕")
-			break
-		}
-		if err != nil {
-			fmt.Println("读取失败")
-		}
-		// fmt.Printf("读取到了%v个字节\n", n)
-		strSlice = append(strSlice, tempSlice[:n]...)
-	}
+}
 
-	fmt.Println(string(strSlice))
+// 通过ioutil复制文件
+func ioutilCopyFile() {
+	byteStr, err1 := ioutil.ReadFile("/Users/yukai/Documents/go/go-test/aaa.txt")
+	if err1 != nil {
+		fmt.Println(err1)
+		return
+	}
+	err2 := ioutil.WriteFile("/Users/yukai/Documents/go/go-test/test1.txt", byteStr, 0666)
+	if err2 != nil {
+		fmt.Println(err2)
+		return
+	}
+	fmt.Println("复制成功")
 }
