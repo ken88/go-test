@@ -3,9 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/olivere/elastic/v7"
 	"gotest/demo01/gorm"
 	"strconv"
+
+	"github.com/olivere/elastic/v7"
 )
 
 var client *elastic.Client

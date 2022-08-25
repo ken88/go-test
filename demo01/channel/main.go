@@ -12,19 +12,47 @@ func main() {
 	// 单条录入管道
 	// test1()
 
-	// 通过for打印chan值
-	// printChan()
+	// 无缓冲区通过for打印chan值
+	// forChan()
+
+	// 有缓冲区 通过for打印chan值
+	forChan1()
 
 	//通过forRange打印chan值
-	forRange()
+	// forRange()
 
 	// 通过携程打印素数
 	// goroutines()
 }
 
 // 通过for打印chan值
-func printChan() {
-	var ch = make(chan int, 10)
+func forChan() {
+	var ch = make(chan int) // 无缓冲区
+
+	go func() {
+		// 增加数据到chan
+		for i := 1; i <= 10; i++ {
+			ch <- i
+		}
+		close(ch)
+	}()
+
+	// 取出chan的信息
+	for {
+		time.Sleep(1 * time.Second)
+		v, ok := <-ch
+		if !ok {
+			fmt.Println("已经读取了所有数据", ok, v)
+			break
+		}
+		fmt.Println("读取的数据", v, ok)
+	}
+}
+
+//  有缓冲区 通过for打印chan值
+func forChan1() {
+	var ch = make(chan int, 10) // 有缓冲区
+
 	// 增加数据到chan
 	for i := 1; i <= 10; i++ {
 		ch <- i

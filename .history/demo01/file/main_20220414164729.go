@@ -39,11 +39,7 @@ func listFiles(dirname string, level int) {
 	}
 	for _, fi := range fileInfos {
 		filename := dirname + "/" + fi.Name()
-		fmt.Printf("%s%s\n", s, filename)
-		if fi.IsDir() {
-			// 递归调用方法
-			listFiles(filename, level+1)
-		}
+
 	}
 }
 

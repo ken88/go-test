@@ -15,7 +15,7 @@ func main() {
 	mux.Handle("/", &helloHandler{})
 
 	server := &http.Server{
-		Addr:    ":8080",
+		Addr:    ":8084",
 		Handler: mux,
 	}
 
